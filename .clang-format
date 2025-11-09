@@ -1,0 +1,37 @@
+BasedOnStyle: Microsoft
+AccessModifierOffset: -4
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignTrailingComments: false
+AlignOperands: true
+AllowShortBlocksOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakTemplateDeclarations: true
+AllowAllParametersOfDeclarationOnNextLine: false
+BinPackArguments: true
+BinPackParameters: true
+BreakBeforeBinaryOperators: None
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterStruct: true
+  AfterFunction: true
+  AfterClass: true
+  AfterNamespace: false
+  AfterObjCDeclaration: false
+  BeforeCatch: true
+  BeforeElse: true
+  SplitEmptyFunction: true
+Cpp11BracedListStyle: true
+ColumnLimit: 280
+FixNamespaceComments: true
+IncludeBlocks: Regroup
+IndentWidth: 4
+PointerAlignment: Left
+TabWidth: 4
+UseTab: Never

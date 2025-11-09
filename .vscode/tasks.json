@@ -1,0 +1,98 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "DebugConfigure",
+      "type": "shell",
+      "hide": true,
+      "command": "cmake",
+      "args": [
+        "${workspaceFolder}",
+        "-B",
+        "${workspaceFolder}/build/Debug",
+        "-DCMAKE_BUILD_TYPE=Debug"
+      ],
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "DebugBuild",
+      "type": "cppbuild",
+      "command": "cmake",
+      "args": ["--build", "${workspaceFolder}/build/Debug"],
+      "problemMatcher": ["$gcc"],
+      "group": "build",
+      "dependsOn": "DebugConfigure"
+    },
+    {
+      "label": "RelWithDebInfoConfigure",
+      "type": "shell",
+      "hide": true,
+      "command": "cmake",
+      "args": [
+        "${workspaceFolder}",
+        "-B",
+        "${workspaceFolder}/build/RelWithDebInfo",
+        "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+      ],
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "RelWithDebInfoBuild",
+      "type": "cppbuild",
+      "command": "cmake",
+      "args": ["--build", "${workspaceFolder}/build/RelWithDebInfo"],
+      "problemMatcher": ["$gcc"],
+      "group": "build",
+      "dependsOn": "RelWithDebInfoConfigure"
+    },
+    {
+      "label": "ReleaseConfigure",
+      "type": "shell",
+      "hide": true,
+      "command": "cmake",
+      "args": [
+        "${workspaceFolder}",
+        "-B",
+        "${workspaceFolder}/build/Release",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "ReleaseBuild",
+      "type": "cppbuild",
+      "command": "cmake",
+      "args": ["--build", "${workspaceFolder}/build/Release"],
+      "problemMatcher": ["$gcc"],
+      "group": "build",
+      "dependsOn": "ReleaseConfigure"
+    },
+    {
+      "label": "Clean Build Directory",
+      "type": "shell",
+      "command": "rm",
+      "args": ["-rf", "${workspaceFolder}/build"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Create C++ Class",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "class_name=${input:className}; header_file=${class_name}.h; cpp_file=${class_name}.cpp; echo \"#pragma once\n\nclass ${class_name} {\npublic:\n\n};\" > $header_file; echo \"#include \\\"${class_name}.h\\\"\n\" > $cpp_file"
+      ],
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "className",
+      "type": "promptString",
+      "description": "Enter class name"
+    }
+  ]
+}
