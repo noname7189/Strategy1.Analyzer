@@ -3,8 +3,6 @@
 #include "BaseStruct/BaseResult.h"
 #include "BaseStruct/BaseSignal.h"
 
-namespace Strategy1 {
-
 struct Strategy1Indicator : BaseIndicator
 {
     DecimalNull Indicator1;
@@ -31,5 +29,3 @@ struct Strategy1SignalArg : BaseSignal
 struct Strategy1Result : BaseResult
 {
 };
-
-} // namespace Strategy1

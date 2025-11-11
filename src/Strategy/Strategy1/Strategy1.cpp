@@ -1,31 +1,29 @@
-#include "Strategy1Analyzer.h"
+#include "Strategy1.h"
 
 #include "Constant.h"
 #include "Parser.h"
 #include "Print.h"
 
+#include <filesystem>
 #include <format>
 #include <fstream>
 #include <sstream>
 
-using Indicator = Strategy1::Strategy1Indicator;
-using Signal = Strategy1::Strategy1Signal;
-using SignalArg = Strategy1::Strategy1SignalArg;
-using Result = Strategy1::Strategy1Result;
-
-void Strategy1Analyzer::SetCandlesImpl(Symbol symbol, Interval interval) noexcept
+void Strategy1::SetCandlesImpl(Symbol symbol, Interval interval) noexcept
 {
-    std::string fileName = std::format("../src/Data/{}_{}.csv", SymbolStr[static_cast<int>(symbol)], IntervalStr[static_cast<int>(interval)]);
+    std::string fileName = std::format("./src/Data/{}_{}.csv", SymbolStr[static_cast<int>(symbol)], IntervalStr[static_cast<int>(interval)]);
     std::ifstream file(fileName);
 
     if (!file.is_open())
     {
-        PrintErr("Open file failed");
+        PrintErr(std::format("Open file failed: {}", strerror(errno)));
+        PrintErr(std::format("Current Path: {}", std::filesystem::current_path().c_str()));
         exit(1);
     }
 
     std::string line;
 
+    std::getline(file, line);
     while (std::getline(file, line))
     {
         std::stringstream ss(line);
@@ -53,38 +51,4 @@ void Strategy1Analyzer::SetCandlesImpl(Symbol symbol, Interval interval) noexcep
 
         Candles.push_back({.Time = time, .Open = open, .High = high, .Low = low, .Close = close, .Volume = volume});
     }
-}
-
-std::vector<Indicator> Strategy1Analyzer::MakeIndicatorsImpl() noexcept
-{
-    std::vector<Indicator> indicators;
-    indicators.reserve(Candles.size());
-
-    for (int i = 0; i < Candles.size(); i++)
-    {
-        Indicator indic;
-        indic.CandleIndex = i;
-        // TODO: 구현
-        indicators.push_back(indic);
-    }
-
-    return indicators;
-}
-
-std::vector<Signal> Strategy1Analyzer::MakeSignalsImpl(SignalArg&& arg) noexcept
-{
-
-    std::vector<Signal> signals;
-    int estimatedCount = Candles.size() / 50;
-    signals.reserve(estimatedCount);
-    // TODO: 구현
-
-    return signals;
-}
-
-std::vector<Result> Strategy1Analyzer::MakeResultsImpl() noexcept
-{
-    std::vector<Result> results;
-    // TODO: 구현
-    return results;
 }
