@@ -17,11 +17,11 @@
       "MIMode": "gdb",
       "miDebuggerPath": "/opt/rh/gcc-toolset-13/root/usr/bin/gdb", // GDB의 경로 (운영체제에 따라 다를 수 있음)
       "setupCommands": [
-        // {
-        //   "description": "Custom libstdcxx printers",
-        //   "text": "python import sys;sys.path.insert(0, '/home/hbjg/.gdb/python');from libstdcxx.v6.printers import register_libstdcxx_printers;register_libstdcxx_printers(None)",
-        //   "ignoreFailures": false
-        // },
+        {
+          "description": "Custom libstdcxx printers",
+          "text": "python import sys;sys.path.insert(0, '/home/develop/.gdb/python');from libstdcxx.v6.printers import register_libstdcxx_printers;register_libstdcxx_printers(None)",
+          "ignoreFailures": false
+        },
         {
           "description": "Enable pretty-printing for gdb",
           "text": "-enable-pretty-printing",

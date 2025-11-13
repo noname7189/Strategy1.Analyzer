@@ -64,17 +64,8 @@ public:
     }
 
     template <int DecimalPlaces>
-    static FORCE_INLINE Decimal ToDecimal(const char* str, int len) noexcept
+    static FORCE_INLINE Decimal<DecimalPlaces> ToDecimal(const char* str, int len) noexcept
     {
-        constexpr Decimal scale = []() constexpr {
-            Decimal s = 1;
-            for (int i = 0; i < DecimalPlaces; ++i)
-            {
-                s *= 10;
-            }
-            return s;
-        }();
-
         bool negative = (len > 0 && str[0] == '-');
         int i = negative ? 1 : 0;
 
@@ -82,7 +73,7 @@ public:
         while (dotPos < len && str[dotPos] != '.')
             ++dotPos;
 
-        if (unlikely(dotPos >= len || dotPos == i || len - dotPos - 1 != DecimalPlaces))
+        if (unlikely(dotPos == i))
         {
             PrintErr(std::format("Wrong Decimal<{}> dotPos format: {}", DecimalPlaces, std::string(str, len)));
             exit(1);
@@ -101,8 +92,20 @@ public:
             intPart = intPart * 10 + (c - '0');
         }
 
+        if (unlikely(dotPos >= len))
+        {
+            Decimal<DecimalPlaces> result{intPart * Decimal<DecimalPlaces>::Divisor};
+            return negative ? Decimal<DecimalPlaces>{-result.Value} : result;
+        }
+
+        if (unlikely(len - dotPos - 1 != DecimalPlaces))
+        {
+            PrintErr(std::format("Wrong Decimal<{}> dotPos format: {}", DecimalPlaces, std::string(str, len)));
+            exit(1);
+        }
+
         // 소수 부분
-        Decimal decimalPart = 0;
+        i64 decimalPart = 0;
         i = dotPos + 1;
         for (int d = 0; d < DecimalPlaces; ++d)
         {
@@ -115,7 +118,7 @@ public:
             decimalPart = decimalPart * 10 + (c - '0');
         }
 
-        Decimal result = intPart * scale + decimalPart;
-        return negative ? -result : result;
+        i64 value = intPart * Decimal<DecimalPlaces>::Divisor + decimalPart;
+        return Decimal<DecimalPlaces>{negative ? -value : value};
     }
 };

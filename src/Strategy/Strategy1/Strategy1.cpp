@@ -24,6 +24,7 @@ void Strategy1::SetCandlesImpl(Symbol symbol, Interval interval) noexcept
     std::string line;
 
     std::getline(file, line);
+
     while (std::getline(file, line))
     {
         std::stringstream ss(line);
@@ -51,4 +52,10 @@ void Strategy1::SetCandlesImpl(Symbol symbol, Interval interval) noexcept
 
         Candles.push_back({.Time = time, .Open = open, .High = high, .Low = low, .Close = close, .Volume = volume});
     }
+}
+
+void Strategy1::SetIndicatorsImpl() noexcept
+{
+    Indicators.resize(GetCandleSizeImpl());
+    SetIndicators(Indicators);
 }
