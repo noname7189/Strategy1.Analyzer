@@ -3,12 +3,12 @@
 #include "Macro.h"
 #include "Strategy1Detail.h"
 
-template <u32 CandleScale, u32 IndicatorScale, auto K>
-constexpr Decimal<IndicatorScale> CalculateEMA(Decimal<CandleScale> currentPrice, Decimal<IndicatorScale> previousIndic)
+template <u32 CandleScale, u32 IndicatorScale>
+constexpr Decimal<IndicatorScale> CalculateEMA(Decimal<IndicatorScale> kDecimal, Decimal<CandleScale> currentPrice, Decimal<IndicatorScale> previousIndic)
 {
-    constexpr i64 k = K.Value;
-    constexpr i64 divisor = K.Divisor;
-    constexpr i64 one_minus_k = divisor - k;
+    const i64 k = kDecimal.Value;
+    const i64 divisor = kDecimal.Divisor;
+    const i64 one_minus_k = divisor - k;
 
     if (unlikely(previousIndic.Value == Decimal<IndicatorScale>::Null))
     {
@@ -31,8 +31,8 @@ constexpr Decimal<IndicatorScale> CalculateEMA(Decimal<CandleScale> currentPrice
     }
 }
 
-template <u32 IndicatorScale, auto K>
-constexpr Decimal<IndicatorScale> CalculateEMA(Decimal<2> currentPrice, Decimal<IndicatorScale> previousIndic)
+template <u32 IndicatorScale>
+constexpr Decimal<IndicatorScale> CalculateEMA(Decimal<IndicatorScale> kDecimal, Decimal<2> currentPrice, Decimal<IndicatorScale> previousIndic)
 {
-    return CalculateEMA<2, IndicatorScale, K>(currentPrice, previousIndic);
+    return CalculateEMA<2, IndicatorScale>(kDecimal, currentPrice, previousIndic);
 }

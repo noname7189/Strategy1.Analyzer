@@ -53,9 +53,3 @@ void Strategy1::SetCandlesImpl(Symbol symbol, Interval interval) noexcept
         Candles.push_back({.Time = time, .Open = open, .High = high, .Low = low, .Close = close, .Volume = volume});
     }
 }
-
-void Strategy1::SetIndicatorsImpl() noexcept
-{
-    Indicators.resize(GetCandleSizeImpl());
-    SetIndicators(Indicators);
-}
