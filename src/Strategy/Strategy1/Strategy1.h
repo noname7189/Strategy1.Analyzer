@@ -14,12 +14,23 @@ class Strategy1 : public IAnalyzer<Strategy1, Strategy1Indicator, Strategy1Signa
     u32 SignalStartIndex;
 
 public:
-    void SetCandlesImpl(Symbol symbol, Interval interval) noexcept;
-
     void Ready() noexcept
     {
         Indicators = ReadyIndicators();
         SignalStartIndex = 119;
+    }
+
+    const u32 GetSignalStartIndex() noexcept
+    {
+        return SignalStartIndex;
+    }
+
+public:
+    void SetCandlesImpl(Symbol symbol, Interval interval) noexcept;
+
+    FORCE_INLINE u32 GetCandleSizeImpl() noexcept
+    {
+        return Candles.size();
     }
 
     void SetIndicatorsImpl(Strategy1IndicatorArg arg) noexcept
@@ -27,17 +38,11 @@ public:
         SetIndicators(Indicators, arg);
     }
 
-    FORCE_INLINE u32 GetCandleSizeImpl() noexcept
-    {
-        return Candles.size();
-    }
-
     FORCE_INLINE Strategy1Indicator MakeIndicator(u32 index, const Strategy1IndicatorArg& arg) noexcept
     {
         constexpr auto null = Decimal<4>::null();
 
         Strategy1Indicator indicator;
-        indicator.CandleIndex = index;
 
         // constexpr Decimal<4> k5{3333};
         // constexpr Decimal<4> k20{952};
