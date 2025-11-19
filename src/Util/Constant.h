@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BaseStruct/BaseEnum.h"
+#include "Type.h"
 
 #include <array>
 
@@ -12,3 +13,5 @@ constexpr std::array<const char*, static_cast<int>(Symbol::ArrayCount)> SymbolSt
     "ethusdt",
     "btcusdt",
 };
+
+constexpr u32 CORE_COUNT = 20;

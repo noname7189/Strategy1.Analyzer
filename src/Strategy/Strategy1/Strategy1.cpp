@@ -11,7 +11,7 @@
 
 void Strategy1::SetCandlesImpl(Symbol symbol, Interval interval) noexcept
 {
-    std::string fileName = std::format("./src/Data/{}_{}.csv", SymbolStr[static_cast<int>(symbol)], IntervalStr[static_cast<int>(interval)]);
+    std::string fileName = std::format("/home/develop/Strategy1.Analyzer/src/Data/{}_{}.csv", SymbolStr[static_cast<int>(symbol)], IntervalStr[static_cast<int>(interval)]);
     std::ifstream file(fileName);
 
     if (!file.is_open())
