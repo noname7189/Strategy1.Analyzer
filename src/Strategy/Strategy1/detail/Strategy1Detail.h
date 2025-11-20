@@ -1,4 +1,5 @@
 #pragma once
+#include "Analyze/AnalyzeResult.h"
 #include "BaseStruct/BaseIndicator.h"
 #include "BaseStruct/BaseResult.h"
 #include "BaseStruct/BaseSignal.h"
@@ -38,3 +39,5 @@ struct Strategy1Signal : BaseSignal<2>
 struct Strategy1Result : BaseResult<2>
 {
 };
+
+using Strategy1AnalyzeResult = AnalyzeResult<Strategy1SignalArg>;

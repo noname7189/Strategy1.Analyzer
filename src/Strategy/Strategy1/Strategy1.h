@@ -25,6 +25,11 @@ public:
         return SignalStartIndex;
     }
 
+    const auto& GetIndicators() const noexcept
+    {
+        return Indicators;
+    }
+
 public:
     void SetCandlesImpl(Symbol symbol, Interval interval) noexcept;
 

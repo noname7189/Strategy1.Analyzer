@@ -15,3 +15,5 @@ constexpr std::array<const char*, static_cast<int>(Symbol::ArrayCount)> SymbolSt
 };
 
 constexpr u32 CORE_COUNT = 20;
+
+constexpr std::size_t RESULT_COUNT = 10;
