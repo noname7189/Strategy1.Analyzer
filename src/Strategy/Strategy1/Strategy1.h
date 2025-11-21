@@ -14,6 +14,8 @@ class Strategy1 : public IAnalyzer<Strategy1, Strategy1Indicator, Strategy1Signa
     u32 SignalStartIndex;
 
 public:
+    using IAnalyzerImpl = std::true_type;
+
     void Ready() noexcept
     {
         Indicators = ReadyIndicators();

@@ -18,6 +18,7 @@ private:
     SignalGrid grid;
 
 public:
+    using GridImpl = std::true_type;
     using Base = IGrid<Strategy1SignalGridImpl, Strategy1SignalArg>;
     using Base::ArgType;
 
