@@ -10,6 +10,7 @@
 #include "Util/Atomic.h"
 
 #include <algorithm>
+#include <sched.h>
 #include <thread>
 
 template <StrategyType Strategy, typename IndicatorArg, typename SignalArg, GridType GridImpl, ResultBase AnalyzeResult>
@@ -32,17 +33,17 @@ public:
         strategy.SetIndicatorsImpl(arg);
     }
 
-    void ProcessChunk(const std::vector<SignalArg>& chunk, Strategy& strategy, std::atomic<u32>& iterCount, OUT std::vector<AnalyzeResult>& results, u32 workerID) noexcept
+    void ProcessChunk(const std::vector<SignalArg>& chunk, Strategy& strategy, std::atomic<u32>& iterCount, OUT std::vector<AnalyzeResult>& results) noexcept
     {
-        auto id = workerID++;
         std::vector<AnalyzeResult> analyzeResults;
         analyzeResults.reserve(chunk.size());
+        auto workerID = sched_getcpu();
         for (const auto& item : chunk)
         {
             auto signals = strategy.MakeSignals(strategy.GetSignalStartIndex(), item);
             auto results = strategy.MakeResults(signals);
             auto before = iterCount.fetch_add(1);
-            PrintOut(std::format("[{:2}] IterCount: {}", id, before + 1));
+            PrintOut(std::format("[{:2}] IterCount: {}", workerID, before + 1));
 
             Decimal<2> totalProfit = {0};
             for (auto& result : results)
@@ -65,14 +66,13 @@ public:
     {
         auto combChunks = runner.template GenerateCombinations<CORE_COUNT>();
         std::atomic<u32> iterCount = 0;
-        u32 workerID = 0;
         std::vector<std::thread> workerList;
 
         std::array<std::vector<AnalyzeResult>, CORE_COUNT> results{};
 
         for (auto i = 0; i < combChunks.size(); i++)
         {
-            workerList.push_back(std::thread(&GridAnalyzeRunner::ProcessChunk, this, std::ref(combChunks[i]), std::ref(strategy), std::ref(iterCount), std::ref(results[i]), workerID++));
+            workerList.push_back(std::thread(&GridAnalyzeRunner::ProcessChunk, this, std::ref(combChunks[i]), std::ref(strategy), std::ref(iterCount), std::ref(results[i])));
         }
 
         for (auto& t : workerList)
