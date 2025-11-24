@@ -149,3 +149,23 @@ int main() {
 3. **IGrid 구현** - 파라미터 조합 생성
 4. **GridAnalyzeRunner 실행** - 멀티스레드 최적화
 
+---
+
+# 개선할 수 있는 점
+
+![image](./src/Data/image.png)
+
+위 perf 분석 이미지에서 알 수 있다시피 거의 대부분의 CPU가 MakeResults에 소모되고, 그 다음 MakeSignals에 소모된다.
+이는 Indicator와 Signal 생성 규칙에 따라 약간씩 바뀔 수 있겠지만, MakeResults에 절대적인 시간이 들어간다는 점은 명백하게 알 수 있다.
+따라서 개선할 수 있는 최적화 지점을 아래와 같이 제안할 수 있다.
+
+1. **CUDA 병렬화**
+   - MakeResults는 (StartIndex, TakeProfit, StopLoss)가 주어진 상태에서 (EndIndex, ExpectedProfit)을 구하는 과정
+   - 각 Signal의 StartIndex, TP, SL은 서로 독립적
+   - 모든 Signal이 단일 Candles 벡터를 읽기 전용으로 공유
+   - 따라서 수십만 개의 Signal을 GPU의 수만 개 코어로 동시 처리 가능
+2. **루프 언롤링 및 SIMD 최적화**
+   - 하나의 Signal이 매우 적은 캔들 내에 close되지는 않는다는 경험적 근거에 의거해, 컴파일타임 상수만큼 루프 언롤링 실시
+   - SIMD 벡터화: 한 번에 4~8개의 Candle High/Low 값을 동시에 TP/SL과 비교
+   - 연속된 메모리 블록을 한 번에 로드
+   - SIMD 마스크로 TP/SL 도달 즉시 감지하여 불필요한 반복 제거
