@@ -154,9 +154,10 @@ int main() {
 # 개선할 수 있는 점
 
 ![image](./src/Data/image.png)
-
-위 perf 분석 이미지에서 알 수 있다시피 거의 대부분의 CPU가 MakeResults에 소모되고, 그 다음 MakeSignals에 소모된다.
-이는 Indicator와 Signal 생성 규칙에 따라 약간씩 바뀔 수 있겠지만, MakeResults에 절대적인 시간이 들어간다는 점은 명백하게 알 수 있다.
+![image2](./src/Data/image2.png)
+차례대로 1298회 반복, 65536회 반복의 perf 분석이미지다.<br/>
+여기서 알 수 있다시피 거의 대부분의 CPU가 MakeResults에 소모되고, 그 다음 MakeSignals에 소모된다.<br/>
+이는 Indicator와 Signal 생성 규칙에 따라 약간씩 바뀔 수 있겠지만, 시행횟수가 늘어남에 따라 MakeResults에 더욱 더 많은 시간이 들어간다는 점은 명백하게 알 수 있다.<br/>
 따라서 개선할 수 있는 최적화 지점을 아래와 같이 제안할 수 있다.
 
 1. **CUDA 병렬화**
